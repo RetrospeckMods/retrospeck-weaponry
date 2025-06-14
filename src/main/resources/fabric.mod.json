@@ -16,7 +16,7 @@
 	"environment": "*",
 	"entrypoints": {
 		"main": [
-			"com.testmod.Testmod"
+			"com.testmod.TestMod"
 		],
 		"fabric-datagen": [
 			"com.testmod.TestmodDataGenerator"
