@@ -5,7 +5,7 @@ import net.fabricmc.api.ModInitializer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class Testmod implements ModInitializer {
+public class TestMod implements ModInitializer {
 	public static final String MOD_ID = "testmod";
 
 	// This logger is used to write text to the console and the log file.
