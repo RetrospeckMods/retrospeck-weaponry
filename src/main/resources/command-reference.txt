@@ -1,0 +1,35 @@
+/{MOD_ID}
+    reload
+    version
+    help
+
+/mana
+    defaults
+        reset
+            all
+            manaLimit
+            regenRate
+        set
+            manaLimit
+                [value]
+            regenRate
+                [value]
+        get
+            manaLimit
+            regenRate
+    add
+        <player>
+            [amount] (uses player's regen rate if not set)
+    set
+        <player> (must be a player)
+            manaAmount
+                <value>
+            manaLimit
+                <value>
+            regenRate
+                <value>
+    get
+        <player> (singular, must be a player)
+            manaAmount
+            manaLimit
+            regenRate
