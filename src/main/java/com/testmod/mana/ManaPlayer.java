@@ -36,9 +36,15 @@ public class ManaPlayer implements ManaComponent {
     public boolean addMana(int amount) {
         if (playerMana >= playerMax && amount > 0)
             return false;
+        else if (playerMana <= 0 && amount < 0)
+            return false;
         int newAmount = playerMana + amount;
         if (newAmount > playerMax) {
             playerMana = playerMax; // fills player's mana to full but doesn't go over
+            return true;
+        }
+        else if (newAmount < 0) {
+            playerMana = 0; // does not let mana go negative
             return true;
         }
         playerMana = newAmount;

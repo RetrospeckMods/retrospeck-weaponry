@@ -189,13 +189,21 @@ public class ManaCommand {
         else
             amount = playerManaInstance.getPlayerRegen();
 
-        int oldMana = playerManaInstance.getPlayerMana();
+        int newMana = playerManaInstance.getPlayerMana() + amount;
         if (!playerManaInstance.addMana(amount)) {
-            context.getSource().sendFeedback(() -> Text.literal("Player's mana is full!").formatted(Formatting.RED), false);
+            if (newMana < 0) {
+                context.getSource().sendFeedback(() -> Text.literal("Player's mana is empty!").formatted(Formatting.RED), false);
+            }
+            else {
+                context.getSource().sendFeedback(() -> Text.literal("Player's mana is full!").formatted(Formatting.RED), false);
+            }
             return -1;
         }
-        if (oldMana+amount > playerManaInstance.getPlayerMax()) {
+        if (newMana > playerManaInstance.getPlayerMax()) {
             context.getSource().sendFeedback(() -> Text.literal("Given value brings player past their mana limit. Player's mana will be filled instead.").formatted(Formatting.RED), true);
+        }
+        else if (newMana < 0) {
+            context.getSource().sendFeedback(() -> Text.literal("Given value brings player's mana amount below 0. Player's mana will be emptied instead.").formatted(Formatting.RED), true);
         }
 
         context.getSource().sendFeedback(() -> Text.literal("Added ").formatted(Formatting.YELLOW)
