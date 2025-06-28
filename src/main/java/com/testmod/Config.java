@@ -59,7 +59,7 @@ public class Config {
         boolean success;
 
         // all systems that need their variables to be reinitialized after config change
-        success = ManaSystem.initialize();
+        success = ManaSystem.reload();
 
         if (!success) {
             throw new RuntimeException("One or more values in config are invalid.");

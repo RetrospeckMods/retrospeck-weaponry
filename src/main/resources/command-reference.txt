@@ -11,9 +11,9 @@
             regenRate
         set
             manaLimit
-                [value]
+                <value>
             regenRate
-                [value]
+                <value>
         get
             manaLimit
             regenRate
@@ -30,6 +30,3 @@
                 <value>
     get
         <player> (singular, must be a player)
-            manaAmount
-            manaLimit
-            regenRate

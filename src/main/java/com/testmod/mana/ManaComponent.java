@@ -11,13 +11,15 @@ public interface ManaComponent {
     boolean addMana(int amount); // will add by set amount, could also be used for potions
     void resetPlayerMax(); // resets to default value
     void resetPlayerRegen(); // resets to default value
-    void setMana(int newAmount); // allows for overflow
+    boolean setMana(int newAmount); // allows for overflow
     boolean setPlayerMax(int newMax);
     boolean setPlayerRegen (int newRate);
 
-    // for potion effects
-    void scalePlayerMax(double scalar);
-    void scalePlayerRegen(double scalar);
+    // for any mod elements that modify player's values
+    void addMaxModifier(double scalar);
+    void addRegenModifier(double scalar);
+    void removeMaxModifier(double modifier);
+    void removeRegenModifier(double modifier);
 
     // getter methods
     int getPlayerMana();

@@ -1,16 +1,20 @@
 package com.testmod.mana;
 
-import com.testmod.TestMod;
+import it.unimi.dsi.fastutil.doubles.DoubleArrayList;
 
-public class ManaPlayer extends ManaSystem implements ManaComponent {
+public class ManaPlayer implements ManaComponent {
     private int playerMana;
     private int playerMax;
     private int playerRegen;
+    private DoubleArrayList playerMaxModifiers;
+    private DoubleArrayList playerRegenModifiers;
 
     public ManaPlayer() {
-        playerMana = getDefaultMax(); // mana is full after initialization
-        playerMax = getDefaultMax();
-        playerRegen = getDefaultRegen();
+        playerMana = ManaSystem.getDefaultMax(); // mana is full after initialization
+        playerMaxModifiers = new DoubleArrayList();
+        playerRegenModifiers = new DoubleArrayList();
+        refreshPlayerMax();
+        refreshPlayerRegen();
     }
 
     public boolean consume(int cost) {
@@ -30,7 +34,7 @@ public class ManaPlayer extends ManaSystem implements ManaComponent {
     }
 
     public boolean addMana(int amount) {
-        if (playerMana >= playerMax)
+        if (playerMana >= playerMax && amount > 0)
             return false;
         int newAmount = playerMana + amount;
         if (newAmount > playerMax) {
@@ -42,17 +46,52 @@ public class ManaPlayer extends ManaSystem implements ManaComponent {
     }
 
     public void resetPlayerMax() {
-        playerMax = getDefaultMax();
+        playerMax = ManaSystem.getDefaultMax();
     }
 
     public void resetPlayerRegen() {
-        playerRegen = getDefaultRegen();
+        playerRegen = ManaSystem.getDefaultRegen();
     }
 
-    public void setMana(int newAmount) {
-        if (newAmount > playerMax)
-            TestMod.LOGGER.warn("Player mana value entered is higher than player's capacity; beware of overflow mana being given");
+    public boolean setMana(int newAmount) {
         playerMana = newAmount;
+        return newAmount >= 0 && newAmount < playerMax;
+    }
+
+    // for mod elements that can modify mana cap/regen rate
+    public void addMaxModifier(double modifier) {
+        playerMaxModifiers.add(modifier);
+        refreshPlayerMax();
+    }
+    public void addRegenModifier(double modifier) {
+        playerRegenModifiers.add(modifier);
+        refreshPlayerRegen();
+    }
+
+    public void removeMaxModifier(double modifier) {
+        playerMaxModifiers.rem(modifier);
+        refreshPlayerMax();
+    }
+
+    public void removeRegenModifier(double modifier) {
+        playerRegenModifiers.rem(modifier);
+        refreshPlayerRegen();
+    }
+
+    public void refreshPlayerMax() {
+        double newPlayerMax = ManaSystem.getDefaultMax();
+        for (double scalar: playerMaxModifiers) {
+            newPlayerMax *= scalar;
+        }
+        playerMax = (int)newPlayerMax;
+    }
+
+    public void refreshPlayerRegen() {
+        double newPlayerRegen = ManaSystem.getDefaultRegen();
+        for (double scalar: playerRegenModifiers) {
+            newPlayerRegen *= scalar;
+        }
+        playerRegen = (int)newPlayerRegen;
     }
 
     public boolean setPlayerMax(int newMax) {
@@ -68,10 +107,6 @@ public class ManaPlayer extends ManaSystem implements ManaComponent {
         playerRegen = newRate;
         return true;
     }
-
-    // scale methods should only be used by elements of the mod, should not need to deal with user input here
-    public void scalePlayerMax(double scalar) { playerMana = (int)(playerMana*scalar); }
-    public void scalePlayerRegen(double scalar) { playerMax = (int)(playerMax*scalar); }
 
     public int getPlayerMana() { return playerMana; }
     public int getPlayerMax() { return playerMax; }

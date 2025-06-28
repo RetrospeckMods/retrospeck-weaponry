@@ -32,7 +32,7 @@ public class TestMod implements ModInitializer {
 		ManaSystem.initialize();
 		ServerPlayConnectionEvents.JOIN.register((handler, sender, server) -> {
 			// give player a mana value when they join
-			ManaSystem.register(handler.getPlayer());
+			ManaSystem.register(handler.getPlayer().getUuid());
 		});
 		registerCommands();
 	}
