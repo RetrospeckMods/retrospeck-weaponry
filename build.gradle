@@ -16,6 +16,7 @@ repositories {
 	// Loom adds the essential maven repositories to download Minecraft and libraries from automatically.
 	// See https://docs.gradle.org/current/userguide/declaring_repositories.html
 	// for more information about repositories.
+	mavenCentral()
 }
 
 fabricApi {
@@ -32,7 +33,11 @@ dependencies {
 
 	// Fabric API. This is technically optional, but you probably want it anyway.
 	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
-	
+
+	include(modImplementation("me.lucko:fabric-permissions-api:0.3.3"))
+
+	implementation 'com.moandjiezana.toml:toml4j:0.7.2'
+	include 'com.moandjiezana.toml:toml4j:0.7.2'
 }
 
 processResources {
