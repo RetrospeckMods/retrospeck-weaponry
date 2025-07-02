@@ -9,6 +9,10 @@ enabled = true
 enableDefaultModify = true
 enablePlayerModify = true
 
+[commands.dash]
+enabled = true
+enableDefualtModify = true
+
 # all numerical values for this section must be positive integers
 [mana]
 defaultManaCap = 100 # this is the max mana that all players start with
