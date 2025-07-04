@@ -4,18 +4,20 @@ import com.testmod.Config;
 import com.testmod.TestMod;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.SwordItem;
 import net.minecraft.item.ToolMaterial;
+import net.minecraft.util.ActionResult;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.item.SwordItem;
 
-public class DaggerItem extends SwordItem {
+public class DaggerItem extends SwordItem implements ReachModifier {
     private final float attackDamage;
     private static float extraDamageMulti;
-    private static double backstabArea;
+    private static double areaCosAngle;
 
-    public DaggerItem(ToolMaterial toolMaterial, float attackDamage, float attackSpeed, Settings settings){
-        super(toolMaterial, attackDamage, attackSpeed, settings);
+    public DaggerItem(ToolMaterial material, float attackDamage, float attackSpeed, Settings settings) {
+        super(material, attackDamage, attackSpeed, settings);
         this.attackDamage = attackDamage;
     }
 
@@ -28,10 +30,10 @@ public class DaggerItem extends SwordItem {
             return false;
         }
         try {
-            backstabArea = (float)(Config.getDouble("abilities.backstab.backstabArea"));
+            areaCosAngle = Config.getDouble("abilities.backstab.backstabArea");
         }
         catch (ArithmeticException e) {
-            TestMod.LOGGER.error("Configuration value backstabArea in [abilities.backstab] is invalid! Expected a double (floating point value).");
+            TestMod.LOGGER.error("Configuration value areaCosAngle in [abilities.backstab] is invalid! Expected a double (floating point value).");
             return false;
         }
         return true;
@@ -39,7 +41,7 @@ public class DaggerItem extends SwordItem {
 
     @Override
     public boolean postHit(ItemStack stack, LivingEntity target, LivingEntity attacker) {
-        if (attacker instanceof PlayerEntity player && isBackStab(attacker, target)) {
+        if (attacker instanceof PlayerEntity player && isBackstab(attacker, target)) {
             if (!attacker.getWorld().isClient && attacker.getWorld() instanceof net.minecraft.server.world.ServerWorld serverWorld) {
                 float extraDamage = attackDamage*extraDamageMulti;
                 target.damage(serverWorld, serverWorld.getDamageSources().playerAttack(player), extraDamage);
@@ -48,14 +50,29 @@ public class DaggerItem extends SwordItem {
         return super.postHit(stack, target, attacker);
     }
 
-    public boolean isBackStab(LivingEntity attacker, LivingEntity target){
-        Vec3d targetLook = target.getRotationVec(0.0f);
-        Vec3d flatTargetLook = new Vec3d(targetLook.x, 0, targetLook.z);
+    public boolean isBackstab(LivingEntity player, LivingEntity target) {
+        Vec3d targetDir = target.getRotationVec(0.0f);
+        Vec3d flatTargetLooking = new Vec3d(targetDir.x, 0, targetDir.z);
 
-        Vec3d delta = attacker.getPos().subtract(target.getPos());
+        Vec3d delta = player.getPos().subtract(target.getPos());
         Vec3d flatToAttacker = new Vec3d(delta.x, 0, delta.z).normalize();
 
-        double dot = flatTargetLook.dotProduct(flatToAttacker);
-        return dot < backstabArea;
+        double dot = flatTargetLooking.dotProduct(flatToAttacker);
+        return dot < areaCosAngle;
+
+        /*double fullConeAngleDegrees = 60;
+        Vec3d playerFacingVec = player.getRotationVec(1.0f).normalize();
+        Vec3d dirToTarget = target.getPos().subtract(player.getPos()).normalize();
+
+        double dot = playerFacingVec.dotProduct(dirToTarget);
+        double angleCos = Math.cos(Math.toRadians(fullConeAngleDegrees/2.0));
+        //for 60 degrees, this is -0.866: concave up between both points (150 and 210 aka +-30 of 180)
+
+        return dot < angleCos;*/
+    }
+
+    @Override
+    public float getReach() {
+        return 1f;
     }
 }

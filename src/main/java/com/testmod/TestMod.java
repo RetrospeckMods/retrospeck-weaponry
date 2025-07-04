@@ -9,7 +9,6 @@ import com.testmod.item.custom.TeleportItem;
 import com.testmod.mana.*;
 
 import me.lucko.fabric.api.permissions.v0.Permissions;
-
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
@@ -95,7 +94,6 @@ public class TestMod implements ModInitializer {
 							.executes(Config::reload))
 					);
 		});
-
 		ManaCommand.register();
 		DashCommand.register();
 	}
