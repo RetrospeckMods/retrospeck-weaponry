@@ -2,6 +2,7 @@ package com.testmod.mana;
 
 import com.testmod.Config;
 import com.testmod.TestMod;
+import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;
 
 import java.util.HashMap;
 import java.util.UUID;
@@ -15,6 +16,10 @@ public class ManaSystem {
         players = new HashMap<>();
         resetDefaultMax();
         resetDefaultRegen();
+        ServerPlayConnectionEvents.JOIN.register((handler, sender, server) -> {
+            // give player a mana value when they join
+            ManaSystem.register(handler.getPlayer().getUuid());
+        });
     }
 
     public static boolean reload() {

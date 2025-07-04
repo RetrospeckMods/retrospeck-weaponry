@@ -1,6 +1,7 @@
 package com.testmod.item;
 
 import com.testmod.TestMod;
+import com.testmod.item.custom.DaggerItem;
 import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents;
 import net.minecraft.item.*;
 import net.minecraft.registry.Registries;
@@ -8,7 +9,6 @@ import net.minecraft.registry.Registry;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.RegistryKeys;
 import net.minecraft.util.Identifier;
-import org.apache.logging.log4j.core.config.plugins.util.ResolverUtil;
 
 import java.util.function.Function;
 
@@ -16,7 +16,13 @@ public class ModItems {
 
     public static final Item DIAMOND_DAGGER = register(
             "diamond_dagger",
-            settings -> new SwordItem(ToolMaterial.DIAMOND, 1.25f, -2f, settings),
+            settings -> new DaggerItem(ToolMaterial.DIAMOND, 1.25f, -2f, settings),
+            new Item.Settings()
+    );
+
+    public static final Item NETHERITE_DAGGER = register(
+            "netherite_dagger",
+            settings -> new DaggerItem(ToolMaterial.NETHERITE, 2f, -2f, settings),
             new Item.Settings()
     );
 
@@ -29,7 +35,14 @@ public class ModItems {
 
     public static void registerModItems() {
         ItemGroupEvents.modifyEntriesEvent(ItemGroups.COMBAT)
-                .register(entries -> entries.add(DIAMOND_DAGGER));
+                .register(entries -> {
+                    /*entries.add(WOODEN_DAGGER);
+                    entries.add(STONE_DAGGER);
+                    entries.add(IRON_DAGGER);
+                    entries.add(GOLD_DAGGER);*/
+                    entries.add(DIAMOND_DAGGER);
+                    entries.add(NETHERITE_DAGGER);
+                });
         }
 
 }
