@@ -1,8 +1,7 @@
 package com.testmod;
 
-import com.testmod.item.ModItems;
-import com.testmod.item.custom.ModDaggerItem;
-import com.testmod.item.custom.ModTeleportItem;
+import com.testmod.item.custom.DaggerItem;
+import com.testmod.item.custom.TeleportItem;
 import com.testmod.mana.ManaSystem;
 
 import com.moandjiezana.toml.Toml;
@@ -20,7 +19,7 @@ import java.util.Objects;
 
 public class Config {
     private static Toml toml;
-    public static final String CONFIG_VERSION = "0.0.2";
+    public static final String CONFIG_VERSION = "0.0.4";
 
     // generates the default config file if not present
     public static boolean load(Path path) {
@@ -63,8 +62,8 @@ public class Config {
 
         // all systems that need their variables to be reinitialized after config change
         success = ManaSystem.reload();
-        success = ModDaggerItem.initialize();
-        success = ModTeleportItem.initialize();
+        success = DaggerItem.initialize();
+        success = TeleportItem.initialize();
 
 
         if (!success) {

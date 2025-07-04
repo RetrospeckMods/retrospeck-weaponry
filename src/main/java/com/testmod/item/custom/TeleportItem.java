@@ -12,11 +12,11 @@ import net.minecraft.util.hit.HitResult;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
-public class ModTeleportItem extends SwordItem {
+public class TeleportItem extends SwordItem {
     private static double teleportLength;
     private static int manaCost;
 
-    public ModTeleportItem (ToolMaterial toolMaterial, float attackDamage, float attackSpeed, Settings settings){
+    public TeleportItem(ToolMaterial toolMaterial, float attackDamage, float attackSpeed, Settings settings){
         super(toolMaterial, attackDamage, attackSpeed, settings);
     }
     public static boolean initialize() {

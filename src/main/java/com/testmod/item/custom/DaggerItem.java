@@ -7,15 +7,14 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.SwordItem;
 import net.minecraft.item.ToolMaterial;
-import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.Vec3d;
 
-public class ModDaggerItem extends SwordItem {
+public class DaggerItem extends SwordItem {
     private final float attackDamage;
     private static float extraDamageMulti;
     private static double backstabArea;
 
-    public ModDaggerItem(ToolMaterial toolMaterial, float attackDamage, float attackSpeed,Settings settings){
+    public DaggerItem(ToolMaterial toolMaterial, float attackDamage, float attackSpeed, Settings settings){
         super(toolMaterial, attackDamage, attackSpeed, settings);
         this.attackDamage = attackDamage;
     }
