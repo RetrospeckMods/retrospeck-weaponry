@@ -5,6 +5,7 @@ import com.testmod.abilities.dash.DashPlayer;
 import com.testmod.abilities.dash.DashSystem;
 import com.testmod.item.ModItems;
 import com.testmod.item.custom.ModDaggerItem;
+import com.testmod.item.custom.ModTeleportItem;
 import com.testmod.mana.*;
 
 import me.lucko.fabric.api.permissions.v0.Permissions;
@@ -20,6 +21,8 @@ import net.minecraft.item.Items;
 import net.minecraft.server.command.CommandManager;
 import net.minecraft.text.Text;
 import net.minecraft.util.ActionResult;
+import net.minecraft.util.hit.BlockHitResult;
+import net.minecraft.util.hit.HitResult;
 import net.minecraft.util.math.Vec3d;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -46,6 +49,7 @@ public class TestMod implements ModInitializer {
 		ManaSystem.initialize();
 		DashSystem.initialize();
 		ModDaggerItem.initialize();
+		ModTeleportItem.initialize();
 		ModItems.registerModItems();
 		ServerPlayConnectionEvents.JOIN.register((handler, sender, server) -> {
 			// give player a mana value when they join
@@ -80,6 +84,7 @@ public class TestMod implements ModInitializer {
 
 
 	}
+
 
 	private void registerCommands() {
 		// main mod command

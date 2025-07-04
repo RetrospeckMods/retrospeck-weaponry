@@ -2,6 +2,7 @@ package com.testmod;
 
 import com.testmod.item.ModItems;
 import com.testmod.item.custom.ModDaggerItem;
+import com.testmod.item.custom.ModTeleportItem;
 import com.testmod.mana.ManaSystem;
 
 import com.moandjiezana.toml.Toml;
@@ -63,6 +64,7 @@ public class Config {
         // all systems that need their variables to be reinitialized after config change
         success = ManaSystem.reload();
         success = ModDaggerItem.initialize();
+        success = ModTeleportItem.initialize();
 
 
         if (!success) {

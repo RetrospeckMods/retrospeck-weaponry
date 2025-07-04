@@ -21,3 +21,7 @@ defaultRegenRate = 7 # the increment in which mana regenerates by
 [abilities.backstab]
 damageMultiplier = 0.5
 backstabArea = -0.8 # base -0.75
+
+[abilities.teleport]
+teleportLength = 10.0
+manaCost = 20

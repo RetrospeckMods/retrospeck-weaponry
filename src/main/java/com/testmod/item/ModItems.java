@@ -4,6 +4,7 @@ import com.testmod.TestMod;
 import com.testmod.item.custom.ModDaggerItem;
 import com.testmod.Config;
 
+import com.testmod.item.custom.ModTeleportItem;
 import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroups;
@@ -27,6 +28,12 @@ public class ModItems {
             new Item.Settings()
     );
 
+    public static final Item ASPECT_OF_THE_END = register(
+            "aspect_of_the_end",
+            settings -> new ModTeleportItem(ToolMaterial.DIAMOND, 7f, 3f, settings),
+            new Item.Settings()
+    );
+
     public static Item register(String name, Function<Item.Settings, Item> itemFactory, Item.Settings settings) {
         RegistryKey<Item> itemKey = RegistryKey.of(RegistryKeys.ITEM, Identifier.of(TestMod.MOD_ID, name));
         Item item = itemFactory.apply(settings.registryKey(itemKey));
@@ -37,6 +44,7 @@ public class ModItems {
     public static void registerModItems() {
         ItemGroupEvents.modifyEntriesEvent(ItemGroups.COMBAT).register(entries -> {
             entries.add(DIAMOND_DAGGER);
+            entries.add(ASPECT_OF_THE_END);
         });
     }
 }
