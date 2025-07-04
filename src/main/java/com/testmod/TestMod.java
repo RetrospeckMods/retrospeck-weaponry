@@ -1,8 +1,10 @@
 package com.testmod;
 
-import com.testmod.abilities.DashCommand;
-import com.testmod.abilities.DashPlayer;
-import com.testmod.abilities.DashSystem;
+import com.testmod.abilities.dash.DashCommand;
+import com.testmod.abilities.dash.DashPlayer;
+import com.testmod.abilities.dash.DashSystem;
+import com.testmod.item.ModItems;
+import com.testmod.item.custom.ModDaggerItem;
 import com.testmod.mana.*;
 
 import me.lucko.fabric.api.permissions.v0.Permissions;
@@ -43,6 +45,8 @@ public class TestMod implements ModInitializer {
 
 		ManaSystem.initialize();
 		DashSystem.initialize();
+		ModDaggerItem.initialize();
+		ModItems.registerModItems();
 		ServerPlayConnectionEvents.JOIN.register((handler, sender, server) -> {
 			// give player a mana value when they join
 			ManaSystem.register(handler.getPlayer().getUuid());

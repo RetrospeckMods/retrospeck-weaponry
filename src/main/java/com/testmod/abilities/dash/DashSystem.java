@@ -1,4 +1,4 @@
-package com.testmod.abilities;
+package com.testmod.abilities.dash;
 
 public class DashSystem {
     private static int DefaultTime;

@@ -1,4 +1,4 @@
-package com.testmod.abilities;
+package com.testmod.abilities.dash;
 
 import net.minecraft.entity.player.PlayerEntity;
 

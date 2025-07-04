@@ -1,10 +1,9 @@
-package com.testmod.abilities;
+package com.testmod.abilities.dash;
 
 
 import com.mojang.brigadier.arguments.DoubleArgumentType;
 import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.testmod.TestMod;
-import com.testmod.mana.ManaSystem;
 import me.lucko.fabric.api.permissions.v0.Permissions;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.minecraft.server.command.CommandManager;

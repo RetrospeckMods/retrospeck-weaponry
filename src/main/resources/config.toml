@@ -1,5 +1,5 @@
 # config version, do not modify
-version = "0.0.1"
+version = "0.0.2"
 
 [commands]
 enabled = true
@@ -17,3 +17,7 @@ enableDefualtModify = true
 [mana]
 defaultManaCap = 100 # this is the max mana that all players start with
 defaultRegenRate = 7 # the increment in which mana regenerates by
+
+[abilities.backstab]
+damageMultiplier = 0.5
+backstabArea = -0.8 # base -0.75
