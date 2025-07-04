@@ -2,8 +2,12 @@ package com.testmod.item;
 
 import com.testmod.TestMod;
 import com.testmod.item.custom.DaggerItem;
+import com.testmod.item.custom.TeleportItem;
+
 import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents;
-import net.minecraft.item.*;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemGroups;
+import net.minecraft.item.ToolMaterial;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
 import net.minecraft.registry.RegistryKey;
@@ -13,7 +17,12 @@ import net.minecraft.util.Identifier;
 import java.util.function.Function;
 
 public class ModItems {
-
+    public static final Item ASPECT_OF_THE_END = register(
+            "aspect_of_the_end",
+            settings -> new TeleportItem(ToolMaterial.DIAMOND, 7f, 3f, settings),
+            new Item.Settings()
+    );
+  
     public static final Item DIAMOND_DAGGER = register(
             "diamond_dagger",
             settings -> new DaggerItem(ToolMaterial.DIAMOND, 1.25f, -2f, settings),
@@ -40,9 +49,9 @@ public class ModItems {
                     entries.add(STONE_DAGGER);
                     entries.add(IRON_DAGGER);
                     entries.add(GOLD_DAGGER);*/
+                    entries.add(ASPECT_OF_THE_END);
                     entries.add(DIAMOND_DAGGER);
                     entries.add(NETHERITE_DAGGER);
                 });
-        }
-
+    }
 }

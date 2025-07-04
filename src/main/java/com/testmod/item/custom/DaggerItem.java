@@ -75,5 +75,4 @@ public class DaggerItem extends SwordItem implements ReachModifier {
     public float getReach() {
         return 1f;
     }
-
 }

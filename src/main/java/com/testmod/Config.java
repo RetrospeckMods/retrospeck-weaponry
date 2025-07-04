@@ -1,5 +1,7 @@
 package com.testmod;
 
+import com.testmod.item.custom.DaggerItem;
+import com.testmod.item.custom.TeleportItem;
 import com.testmod.mana.ManaSystem;
 import com.testmod.item.custom.DaggerItem;
 
@@ -18,7 +20,7 @@ import java.util.Objects;
 
 public class Config {
     private static Toml toml;
-    public static final String CONFIG_VERSION = "0.0.3";
+    public static final String CONFIG_VERSION = "0.0.4";
 
     // generates the default config file if not present
     public static boolean load(Path path) {
@@ -57,11 +59,12 @@ public class Config {
     public static int reload(CommandContext<ServerCommandSource> context) {
         if (!load(FabricLoader.getInstance().getConfigDir().resolve(TestMod.MOD_ID + "/config.toml")))
             throw new RuntimeException("Failed to initialize config");
-        boolean success;
+        boolean success = false;
 
         // all systems that need their variables to be reinitialized after config change
         success = ManaSystem.reload();
         success = DaggerItem.initialize();
+        success = TeleportItem.initialize();
 
         if (!success) {
             throw new RuntimeException("One or more values in config are invalid.");

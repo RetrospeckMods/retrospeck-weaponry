@@ -1,5 +1,5 @@
 # config version, do not modify
-version = "0.0.3"
+version = "0.0.4"
 
 [commands]
 enabled = true
@@ -20,4 +20,8 @@ defaultRegenRate = 7 # the increment in which mana regenerates by
 
 [abilities.backstab]
 damageMultiplier = 0.5
-areaCosAngle = -0.8 # base -0.75
+areaCosAngle = -0.8
+
+[abilities.teleport]
+teleportLength = 10.0
+manaCost = 20
