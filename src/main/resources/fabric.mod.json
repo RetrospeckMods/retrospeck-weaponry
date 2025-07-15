@@ -16,15 +16,18 @@
 	"environment": "*",
 	"entrypoints": {
 		"main": [
-			"com.testmod.TestMod"
+			"com.retrospeck.testmod.TestMod"
+		],
+		"client": [
+			"com.retrospeck.testmod.TestModClient"
 		],
 		"fabric-datagen": [
-			"com.testmod.TestModDataGenerator"
+			"com.retrospeck.testmod.TestModDataGenerator"
+		],
+		"cardinal-components-entity": [
+			"com.retrospeck.testmod.ModComponents"
 		]
 	},
-	"mixins": [
-		"testmod.mixins.json"
-	],
 	"depends": {
 		"fabricloader": ">=0.16.14",
 		"minecraft": "~1.21.4",
@@ -33,5 +36,10 @@
 	},
 	"suggests": {
 		"another-mod": "*"
+	},
+	"custom": {
+		"cardinal-components": [
+			"testmod:mana"
+		]
 	}
 }

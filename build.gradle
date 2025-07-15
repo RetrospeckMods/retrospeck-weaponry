@@ -17,6 +17,10 @@ repositories {
 	// See https://docs.gradle.org/current/userguide/declaring_repositories.html
 	// for more information about repositories.
 	mavenCentral()
+	maven {
+		name = "Ladysnake Mods"
+		url = 'https://maven.ladysnake.org/releases'
+	}
 }
 
 fabricApi {
@@ -34,7 +38,9 @@ dependencies {
 	// Fabric API. This is technically optional, but you probably want it anyway.
 	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
 
-	include(modImplementation("me.lucko:fabric-permissions-api:0.3.3"))
+	modImplementation "me.lucko:fabric-permissions-api:0.3.3"
+	modImplementation "org.ladysnake.cardinal-components-api:cardinal-components-base:${project.cca_version}"
+	modImplementation "org.ladysnake.cardinal-components-api:cardinal-components-entity:${project.cca_version}"
 
 	implementation 'com.moandjiezana.toml:toml4j:0.7.2'
 	include 'com.moandjiezana.toml:toml4j:0.7.2'

@@ -1,8 +1,8 @@
-package com.testmod.item;
+package com.retrospeck.testmod.item;
 
-import com.testmod.TestMod;
-import com.testmod.item.custom.DaggerItem;
-import com.testmod.item.custom.TeleportItem;
+import com.retrospeck.testmod.TestMod;
+import com.retrospeck.testmod.item.custom.DaggerItem;
+import com.retrospeck.testmod.item.custom.TeleportItem;
 
 import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents;
 import net.minecraft.item.Item;
@@ -45,10 +45,12 @@ public class ModItems {
     public static void registerModItems() {
         ItemGroupEvents.modifyEntriesEvent(ItemGroups.COMBAT)
                 .register(entries -> {
-                    /*entries.add(WOODEN_DAGGER);
+                    /*
+                    entries.add(WOODEN_DAGGER);
                     entries.add(STONE_DAGGER);
                     entries.add(IRON_DAGGER);
-                    entries.add(GOLD_DAGGER);*/
+                    entries.add(GOLD_DAGGER);
+                    */
                     entries.add(ASPECT_OF_THE_END);
                     entries.add(DIAMOND_DAGGER);
                     entries.add(NETHERITE_DAGGER);

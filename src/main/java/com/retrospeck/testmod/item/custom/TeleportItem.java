@@ -1,8 +1,8 @@
-package com.testmod.item.custom;
+package com.retrospeck.testmod.item.custom;
 
-import com.testmod.Config;
-import com.testmod.TestMod;
-import com.testmod.mana.ManaSystem;
+import com.retrospeck.testmod.Config;
+import com.retrospeck.testmod.ModComponents;
+import com.retrospeck.testmod.TestMod;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.SwordItem;
 import net.minecraft.item.ToolMaterial;
@@ -20,28 +20,31 @@ public class TeleportItem extends SwordItem {
         super(toolMaterial, attackDamage, attackSpeed, settings);
     }
     public static boolean initialize() {
+        boolean success = true;
         try {
             teleportLength = Config.getDouble("abilities.teleport.teleportLength");
         }
         catch (ArithmeticException e) {
-            TestMod.LOGGER.error("Configuration value teleportLength in [abilities.teleport] is invalid! Expected a float (floating point value).");
-            return false;
+            teleportLength = 0.0;
+            TestMod.LOGGER.error("Configuration value teleportLength in [abilities.teleport] is invalid! Expected a double (floating point value).");
+            success = false;
         }
         try {
             manaCost = (int) (Config.getLong("abilities.teleport.manaCost"));
         }
         catch (ArithmeticException e) {
-            TestMod.LOGGER.error("Configuration value manaCost in [abilities.teleport] is invalid! Expected a Integer.");
-            return false;
+            manaCost = 0;
+            TestMod.LOGGER.error("Configuration value manaCost in [abilities.teleport] is invalid! Expected an integer.");
+            success = false;
         }
-        return true;
+        return success;
     }
     @Override
     public ActionResult use(World world, PlayerEntity player, Hand hand){
         if (world.isClient){
             return ActionResult.PASS;
         }
-        if (ManaSystem.getManaInstance(player.getUuid()).consume(manaCost)) {
+        if (ModComponents.MANA.get(player).consume(manaCost)) {
             teleport(player);
             return ActionResult.SUCCESS;
         }

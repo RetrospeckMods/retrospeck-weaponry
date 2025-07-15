@@ -1,12 +1,11 @@
-package com.testmod;
-
-import com.testmod.item.custom.DaggerItem;
-import com.testmod.item.custom.TeleportItem;
-import com.testmod.mana.ManaSystem;
-import com.testmod.item.custom.DaggerItem;
+package com.retrospeck.testmod;
 
 import com.moandjiezana.toml.Toml;
 import com.mojang.brigadier.context.CommandContext;
+import com.retrospeck.testmod.abilities.dash.DashHandler;
+import com.retrospeck.testmod.item.custom.DaggerItem;
+import com.retrospeck.testmod.item.custom.TeleportItem;
+import com.retrospeck.testmod.mana.ManaSystem;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.text.Text;
@@ -20,7 +19,7 @@ import java.util.Objects;
 
 public class Config {
     private static Toml toml;
-    public static final String CONFIG_VERSION = "0.0.4";
+    public static final String CONFIG_VERSION = "0.0.6";
 
     // generates the default config file if not present
     public static boolean load(Path path) {
@@ -62,7 +61,8 @@ public class Config {
         boolean success = false;
 
         // all systems that need their variables to be reinitialized after config change
-        success = ManaSystem.reload();
+        success = ManaSystem.reload(context.getSource().getServer());
+        success = DashHandler.loadValues();
         success = DaggerItem.initialize();
         success = TeleportItem.initialize();
 

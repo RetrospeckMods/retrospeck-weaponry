@@ -1,6 +1,8 @@
-package com.testmod.mana;
+package com.retrospeck.testmod.mana;
 
-public interface ManaComponent {
+import org.ladysnake.cca.api.v3.component.Component;
+
+public interface ManaComponent extends Component {
     // player consumes mana when they use an ability, returns true if successful
     boolean consume(int cost);
 
@@ -20,6 +22,10 @@ public interface ManaComponent {
     void addRegenModifier(double scalar);
     void removeMaxModifier(double modifier);
     void removeRegenModifier(double modifier);
+
+    // refresh modifiers
+    void refreshPlayerMax();
+    void refreshPlayerRegen();
 
     // getter methods
     int getPlayerMana();

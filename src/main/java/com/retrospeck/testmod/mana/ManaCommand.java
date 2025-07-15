@@ -1,12 +1,14 @@
-package com.testmod.mana;
+package com.retrospeck.testmod.mana;
 
 import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.brigadier.context.CommandContext;
-import com.testmod.Config;
-import com.testmod.TestMod;
+import com.retrospeck.testmod.Config;
+import com.retrospeck.testmod.ModComponents;
+import com.retrospeck.testmod.TestMod;
 import me.lucko.fabric.api.permissions.v0.Permissions;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.minecraft.command.argument.EntityArgumentType;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.command.CommandManager;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.server.network.ServerPlayerEntity;
@@ -27,7 +29,8 @@ public class ManaCommand {
                             .then(CommandManager.literal("reset")
                                     .then(CommandManager.literal("all")
                                             .executes(context -> {
-                                                if (!ManaSystem.resetDefaultMax() || !ManaSystem.resetDefaultRegen())
+                                                MinecraftServer server = context.getSource().getServer();
+                                                if (!ManaSystem.resetDefaultMax(server) || !ManaSystem.resetDefaultRegen(server))
                                                     throw new RuntimeException("Invalid config values");
                                                 context.getSource().sendFeedback(() -> Text.literal("Successfully reset all default mana values").formatted(Formatting.YELLOW), true);
                                                 return 1;
@@ -35,7 +38,7 @@ public class ManaCommand {
                                     )
                                     .then(CommandManager.literal("manaLimit")
                                             .executes(context -> {
-                                                if (!ManaSystem.resetDefaultMax())
+                                                if (!ManaSystem.resetDefaultMax(context.getSource().getServer()))
                                                     throw new RuntimeException("Invalid config values");
                                                 context.getSource().sendFeedback(() -> Text.literal("Successfully reset default mana limit").formatted(Formatting.YELLOW), true);
                                                 return 1;
@@ -43,7 +46,7 @@ public class ManaCommand {
                                     )
                                     .then(CommandManager.literal("regenRate")
                                             .executes(context -> {
-                                                if (!ManaSystem.resetDefaultRegen())
+                                                if (!ManaSystem.resetDefaultRegen(context.getSource().getServer()))
                                                     throw new RuntimeException("Invalid config values");
                                                 context.getSource().sendFeedback(() -> Text.literal("Successfully reset default mana regen rate").formatted(Formatting.YELLOW), true);
                                                 return 1;
@@ -56,7 +59,7 @@ public class ManaCommand {
                                             .then(CommandManager.argument("value", IntegerArgumentType.integer())
                                                     .executes(context -> {
                                                         int value = IntegerArgumentType.getInteger(context, "value");
-                                                        if (!ManaSystem.setDefaultMax(value)) {
+                                                        if (!ManaSystem.setDefaultMax(value, context.getSource().getServer())) {
                                                             context.getSource().sendFeedback(() -> Text.literal("Enter a positive integer.").formatted(Formatting.RED), false);
                                                             return -1;
                                                         }
@@ -70,7 +73,7 @@ public class ManaCommand {
                                             .then(CommandManager.argument("value", IntegerArgumentType.integer())
                                                     .executes(context -> {
                                                         int value = IntegerArgumentType.getInteger(context, "value");
-                                                        if (!ManaSystem.setDefaultRegen(value)) {
+                                                        if (!ManaSystem.setDefaultRegen(value, context.getSource().getServer())) {
                                                             context.getSource().sendFeedback(() -> Text.literal("Enter a positive integer.").formatted(Formatting.RED), false);
                                                             return -1;
                                                         }
@@ -115,14 +118,14 @@ public class ManaCommand {
                                             .then(CommandManager.argument("value", IntegerArgumentType.integer())
                                                     .executes(context -> {
                                                         ServerPlayerEntity player = EntityArgumentType.getPlayer(context, "player");
-                                                        if (!ManaSystem.getManaInstance(player.getUuid()).setMana(IntegerArgumentType.getInteger(context, "value"))) {
+                                                        if (!ModComponents.MANA.get(player).setMana(IntegerArgumentType.getInteger(context, "value"))) {
                                                             context.getSource().sendFeedback(() -> Text.literal("Warning! ").formatted(Formatting.RED)
                                                                     .append(Text.literal("Setting a player's mana to a value below zero or greater than their limit may cause unintended side effects.").formatted(Formatting.YELLOW)), false);
                                                         }
                                                         context.getSource().sendFeedback(() -> Text.literal("Set ").formatted(Formatting.YELLOW)
                                                                 .append(Text.literal(player.getName().getString()).formatted(Formatting.DARK_GREEN))
                                                                 .append(Text.literal("'s mana amount to").formatted(Formatting.YELLOW))
-                                                                .append(Text.literal(" " + ManaSystem.getManaInstance(player.getUuid()).getPlayerMana()).formatted(Formatting.AQUA)), true);
+                                                                .append(Text.literal(" " + ModComponents.MANA.get(player).getPlayerMana()).formatted(Formatting.AQUA)), true);
                                                         return 1;
                                                     })
                                             )
@@ -131,13 +134,13 @@ public class ManaCommand {
                                             .then(CommandManager.argument("value", IntegerArgumentType.integer())
                                                     .executes(context -> {
                                                         ServerPlayerEntity player = EntityArgumentType.getPlayer(context, "player");
-                                                        if (!ManaSystem.getManaInstance(player.getUuid()).setPlayerMax(IntegerArgumentType.getInteger(context, "value"))) {
+                                                        if (!ModComponents.MANA.get(player).setPlayerMax(IntegerArgumentType.getInteger(context, "value"))) {
                                                             context.getSource().sendFeedback(() -> Text.literal("Enter a positive integer.").formatted(Formatting.RED), false);
                                                         }
                                                         context.getSource().sendFeedback(() -> Text.literal("Set ").formatted(Formatting.YELLOW)
                                                                 .append(Text.literal(player.getName().getString()).formatted(Formatting.DARK_GREEN))
                                                                 .append(Text.literal("'s mana limit to").formatted(Formatting.YELLOW))
-                                                                .append(Text.literal(" " + ManaSystem.getManaInstance(player.getUuid()).getPlayerMax()).formatted(Formatting.AQUA)), true);
+                                                                .append(Text.literal(" " + ModComponents.MANA.get(player).getPlayerMax()).formatted(Formatting.AQUA)), true);
                                                         return 1;
                                                     })
                                             )
@@ -146,13 +149,13 @@ public class ManaCommand {
                                             .then(CommandManager.argument("value", IntegerArgumentType.integer())
                                                     .executes(context -> {
                                                         ServerPlayerEntity player = EntityArgumentType.getPlayer(context, "player");
-                                                        if (!ManaSystem.getManaInstance(player.getUuid()).setPlayerRegen(IntegerArgumentType.getInteger(context, "value"))) {
+                                                        if (!ModComponents.MANA.get(player).setPlayerRegen(IntegerArgumentType.getInteger(context, "value"))) {
                                                             context.getSource().sendFeedback(() -> Text.literal("Enter a positive integer.").formatted(Formatting.RED), false);
                                                         }
                                                         context.getSource().sendFeedback(() -> Text.literal("Set ").formatted(Formatting.YELLOW)
                                                                 .append(Text.literal(player.getName().getString()).formatted(Formatting.DARK_GREEN))
                                                                 .append(Text.literal("'s mana regen rate to").formatted(Formatting.YELLOW))
-                                                                .append(Text.literal(" " + ManaSystem.getManaInstance(player.getUuid()).getPlayerRegen()).formatted(Formatting.AQUA)), true);
+                                                                .append(Text.literal(" " + ModComponents.MANA.get(player).getPlayerRegen()).formatted(Formatting.AQUA)), true);
                                                         return 1;
                                                     })
                                             )
@@ -164,7 +167,7 @@ public class ManaCommand {
                             .then(CommandManager.argument("player", EntityArgumentType.player())
                                     .executes(context -> {
                                         ServerPlayerEntity player = EntityArgumentType.getPlayer(context, "player");
-                                        ManaPlayer playerManaInstance = ManaSystem.getManaInstance(player.getUuid());
+                                        ManaComponentImpl playerManaInstance = ModComponents.MANA.get(player);
                                         context.getSource().sendFeedback(() -> Text.literal(player.getName().getString()).formatted(Formatting.DARK_GREEN)
                                                 .append(Text.literal(" has").formatted(Formatting.YELLOW))
                                                 .append(Text.literal(" " + playerManaInstance.getPlayerMana()).formatted(Formatting.AQUA))
@@ -182,7 +185,7 @@ public class ManaCommand {
 
     public static int commandAddMana(CommandContext<ServerCommandSource> context, ServerPlayerEntity player, boolean hasAmountArg) {
         int amount;
-        ManaPlayer playerManaInstance = ManaSystem.getManaInstance(player.getUuid());
+        ManaComponentImpl playerManaInstance = ModComponents.MANA.get(player);
 
         if (hasAmountArg)
             amount = IntegerArgumentType.getInteger(context, "amount");
