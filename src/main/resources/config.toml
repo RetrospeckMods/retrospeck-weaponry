@@ -29,6 +29,6 @@ teleportLength = 10.0
 manaCost = 20
 
 [abilities.dash]
-duration = 5 # ticks
-distance = 5 # blocks
+duration = 6 # ticks
+distance = 8 # blocks
 cooldown = 60

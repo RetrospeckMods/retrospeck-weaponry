@@ -100,23 +100,20 @@ public class DashHandler {
         if (activeDashes.containsKey(uuid)) return;
         int cooldownRemaining = cooldowns.getOrDefault(uuid, 0);
         if (cooldownRemaining > 0) {
-            player.sendMessage(Text.literal("You are on cooldown! " + DECIMAL_FORMAT.format(cooldownRemaining/20.0) + " seconds left.").formatted(Formatting.RED));
+            player.sendMessage(Text.literal("You are on cooldown! " + DECIMAL_FORMAT.format(cooldownRemaining/20.0) + " seconds left.").formatted(Formatting.RED), true);
             return;
         }
 
-        Vec3d baseVelo = player.getMovement();
         Vec3d lookDir = player.getRotationVector().normalize();
-        Vec3d dashVelo = baseVelo.add(lookDir.multiply(dashSpeed));
-        Vec3d slowdownVelo = baseVelo.add(lookDir.multiply(dashSlowdown));
+        Vec3d dashVelo = lookDir.multiply(dashSpeed);
+        Vec3d slowdownVelo = lookDir.multiply(dashSlowdown);
 
-        activeDashes.put(uuid, new DashData(baseVelo, dashVelo, slowdownVelo, dashDuration));
+        activeDashes.put(uuid, new DashData(dashVelo, slowdownVelo, dashDuration));
     }
 
     private static void serverTick(MinecraftServer server) {
         if (!activeDashes.isEmpty()) {
-            activeDashes.entrySet().removeIf(entry -> {
-                return !applyDash(entry, server);
-            });
+            activeDashes.entrySet().removeIf(entry -> !applyDash(entry, server));
         }
 
         if (cooldowns.isEmpty()) return;
@@ -138,16 +135,16 @@ public class DashHandler {
             cooldowns.put(uuid, cooldownTicks);
         }
         else {
-            player.setVelocity(data.baseVelo);
+            player.setVelocity(Vec3d.ZERO);
             return false;
         }
         player.velocityModified = true;
 
-        data = new DashData(data.baseVelo, data.dashVelo, data.slowdownVelo, data.ticksRemaining-1);
+        data = new DashData(data.dashVelo, data.slowdownVelo, data.ticksRemaining-1);
         entry.setValue(data);
 
         return true;
     }
 
-    private record DashData(Vec3d baseVelo, Vec3d dashVelo, Vec3d slowdownVelo, int ticksRemaining) {}
+    private record DashData(Vec3d dashVelo, Vec3d slowdownVelo, int ticksRemaining) {}
 }
