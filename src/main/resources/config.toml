@@ -1,0 +1,34 @@
+# config version, for development purposes only
+version = "0.0.6"
+
+[commands]
+enabled = true
+
+[commands.mana]
+enabled = true
+enableDefaultModify = true
+enablePlayerModify = true
+
+[commands.dash]
+enabled = true
+enableDefualtModify = true
+
+[mana]
+# all numerical values for this section must be positive integers
+defaultManaCap = 100 # this is the max mana that all players start with
+defaultRegenRate = 7 # mana regen amount (amount of mana regenerated every interval)
+ticksBetweenRegen = 20 # mana regen speed (measured in ticks between mana regen intervals)
+
+[abilities.backstab]
+damageMultiplier = 0.5
+areaCosAngle = -0.8
+cooldown = 60 # cooldowns are measured in ticks (20 ticks = 1 second), 0 to disable
+
+[abilities.teleport]
+teleportLength = 10.0
+manaCost = 20
+
+[abilities.dash]
+duration = 6 # ticks
+distance = 8 # blocks
+cooldown = 60
